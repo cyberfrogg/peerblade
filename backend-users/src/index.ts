@@ -4,6 +4,7 @@ import GetPingRoute from "./routes/api/v1/GetPingRoute";
 import IRoute from "./services/routes/IRoute";
 import LoggerService from './services/logger/impl/LoggerService';
 import ILoggerService from "./services/logger/ILoggerService";
+import PostUserCreateRoute from "./routes/api/v1/user/PostUserCreateRoute";
 const cors = require('cors');
 
 
@@ -31,6 +32,7 @@ const initializeApp = async () => {
 const createRoutes = async (logger: ILoggerService): Promise<Array<IRoute>> => {
     let routes = new Array<IRoute>();
     routes.push(new GetPingRoute("/api/v1/ping"));
+    routes.push(new PostUserCreateRoute("/api/v1/user/create"));
 
     // initialize routes
     for (const route of routes) {

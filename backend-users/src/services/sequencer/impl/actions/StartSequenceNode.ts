@@ -7,7 +7,6 @@ class StartSequenceNode extends SequenceNodeAction {
     }
 
     execute = async (data: SequenceNodeExecuteData): Promise<void> => {
-        console.log("StartSequenceNode execute");
         await this.next(data);
     }
 }

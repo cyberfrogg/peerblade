@@ -21,8 +21,10 @@ class SequenceNode {
     }
 
     next = async (data: SequenceNodeExecuteData): Promise<void> => {
-        if (this.nextNodeNode == undefined)
+        if (this.nextNodeNode == undefined) {
+            console.error("No Next Node was defined in " + this.name + " node");
             return;
+        }
 
         await this.nextNodeNode.execute(data);
     }
