@@ -4,9 +4,9 @@ class SequenceNodeExecuteData {
     request: Request
     response: Response;
     type: string;
-    data: any;
+    data: Record<string, any> = {};
 
-    constructor(type: string, request: Request, response: Response, data?: any) {
+    constructor(type: string, request: Request, response: Response, data?: Record<string, any>) {
         this.type = type;
         this.request = request;
         this.response = response;

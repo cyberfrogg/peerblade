@@ -4,16 +4,26 @@ import ApiResponseData from "../../utils/ApiResponseData";
 
 class ReturnErrCodeSequenceNode extends SequenceNodeAction {
     readonly errcode: string = "ERRCODE_UNKNOWN";
-    readonly isExposeData: boolean = false;
+    readonly keysToOutput: string[];
 
-    constructor(errcode: string, isExposeData: boolean) {
+    constructor(errcode: string, keysToOutput: string[]) {
         super("action", "returnErrCode");
         this.errcode = errcode;
-        this.isExposeData = isExposeData;
+        this.keysToOutput = keysToOutput
     }
 
     execute = async (data: SequenceNodeExecuteData): Promise<void> => {
-        data.response.json(ApiResponseData.Error(this.errcode, this.isExposeData ? data.data : undefined));
+        let dataToOutput: Record<string, any> = {};
+
+        for (const key in data.data) {
+            if (this.keysToOutput.includes(key)) {
+                dataToOutput[key] = data.data[key];
+            }
+        }
+
+        data.response.json(ApiResponseData.Error(this.errcode, dataToOutput));
+
+        await this.next(data);
     }
 }
 

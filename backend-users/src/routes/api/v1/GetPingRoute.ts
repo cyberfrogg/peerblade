@@ -15,7 +15,7 @@ class GetPingRoute implements IRoute {
 
         let firstNode = new StartSequenceNode();
         firstNode
-            .append(new ReturnSuccessWithPreviousNodeDataNode())
+            .append(new ReturnSuccessWithPreviousNodeDataNode([]))
 
         expressApp.get(this.path, (req: Request, res: Response) => {
             firstNode.execute(SequenceNodeExecuteData.empty(req, res))

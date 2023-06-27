@@ -3,8 +3,9 @@ import IRoute from "../../../../services/routes/IRoute";
 import StartSequenceNode from "../../../../services/sequencer/impl/actions/StartSequenceNode";
 import SequenceNodeExecuteData from "../../../../services/sequencer/SequenceNodeExecuteData";
 import ReturnSuccessWithPreviousNodeDataNode from "../../../../services/sequencer/impl/actions/ReturnSuccessWithPreviousNodeDataNode";
-import ValidateUserCreateInputNode from "../../../../services/sequencer/impl/validators/ValidateUserCreateInputNode";
+import ValidateUserCreateInputNode from "../../../../services/sequencer/impl/validators/input/ValidateUserCreateInputNode";
 import ReturnErrCodeSequenceNode from "../../../../services/sequencer/impl/actions/ReturnErrCodeSequenceNode";
+import ValidateUserExistsNode from "../../../../services/sequencer/impl/validators/ValidateUserExistsNode";
 
 class PostUserCreateRoute implements IRoute {
     readonly path: string;
@@ -19,8 +20,14 @@ class PostUserCreateRoute implements IRoute {
         firstNode
             .append(
                 new ValidateUserCreateInputNode(
-                    new ReturnSuccessWithPreviousNodeDataNode(),
-                    new ReturnErrCodeSequenceNode("ERRCODE_VALIDATION_FAIL", true)
+                    new ValidateUserExistsNode(
+                        new ReturnSuccessWithPreviousNodeDataNode([]),
+                        new ReturnErrCodeSequenceNode("ERRCODE_USER_EXISTS", [])
+                    ),
+                    new ReturnErrCodeSequenceNode(
+                        "ERRCODE_VALIDATION_FAIL",
+                        ["isFieldValidationFailed", "failedValidationField"]
+                    )
                 )
             );
 

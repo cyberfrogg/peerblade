@@ -1,8 +1,8 @@
-import SequenceNodeValidator from "../../SequenceNodeValidator";
-import SequenceNodeExecuteData from "../../SequenceNodeExecuteData";
-import SequenceNode from "../../SequenceNode";
-import RangeVal from "../../../utils/RangeVal";
-import { REGEX_EMAIL_VALIDATION_TEST } from "../../../utils/RegexPalletes"
+import SequenceNodeValidator from "../../../SequenceNodeValidator";
+import SequenceNodeExecuteData from "../../../SequenceNodeExecuteData";
+import SequenceNode from "../../../SequenceNode";
+import RangeVal from "../../../../utils/RangeVal";
+import { REGEX_EMAIL_VALIDATION_TEST } from "../../../../utils/RegexPalletes"
 
 class ValidateUserCreateInputNode extends SequenceNodeValidator {
     readonly usernameRange: RangeVal = new RangeVal(4, 30);
