@@ -22,7 +22,10 @@ class SequenceNode {
         console.error("SequenceNode " + this.name + " not implemented");
     }
 
-    executeOnErrorNode = async (data: SequenceNodeExecuteData): Promise<void> => {
+    executeOnErrorNode = async (debugMessage: string, data: SequenceNodeExecuteData): Promise<void> => {
+        console.error("Error happened in node " + this.name + " error message:");
+        console.error(debugMessage);
+
         if (this.onErrorNode != undefined) {
             await this.onErrorNode.execute(data);
             return;

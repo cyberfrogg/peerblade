@@ -29,14 +29,14 @@ class ValidateUserExistsSequenceNode extends SequenceNodeValidator {
 
     execute = async (data: SequenceNodeExecuteData): Promise<void> => {
         try {
-
             const queryResult = await this.databaseQuery
                 .selectAllFrom("users")
                 .where("username = ? OR email = ?")
-                .execute([data.data[this.usernameToCheck, this.emailToCheck]]);
+                .execute([data.data[this.usernameToCheck], data.data[this.emailToCheck]]);
 
             if (queryResult.length == 0) {
                 await this.executeOnFalseNode(data);
+                return;
             }
 
             data.data[this.discoveredUserRecord] = queryResult[0];
@@ -44,7 +44,7 @@ class ValidateUserExistsSequenceNode extends SequenceNodeValidator {
             await this.executeOnTrueNode(data);
         }
         catch (e) {
-
+            await this.executeOnErrorNode("Failed to query database. Error message: " + e, data);
         }
     }
 }

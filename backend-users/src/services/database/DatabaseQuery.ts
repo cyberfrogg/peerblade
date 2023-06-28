@@ -48,7 +48,6 @@ class DatabaseQueryWhere {
 
     execute = async (values: any[]): Promise<any[]> => {
         let queryResult = await this.self.mysql.query(this.self.constructedQuery, values) as any[];
-
         return queryResult;
     }
 }

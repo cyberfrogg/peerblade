@@ -20,6 +20,7 @@ class ReturnSuccessWithDataNode extends SequenceNodeAction {
             }
         }
 
+        console.log("------------------------------")
         data.response.json(ApiResponseData.Success(dataToOutput));
 
         await this.next(data);

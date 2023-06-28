@@ -32,9 +32,9 @@ class PostUserCreateRoute implements IRoute {
                     new ValidatePasswordSequenceNode(
                         new ValidateEmailSequenceNode(
                             new ValidateUserExistsSequenceNode(
-                                new ReturnSuccessWithDataNode([]),
                                 new ReturnErrCodeSequenceNode("ERRCODE_USER_EXISTS", []),
-                                undefined,
+                                new ReturnSuccessWithDataNode([]),
+                                new ReturnErrCodeSequenceNode("ERRCODE_USER_EXISTS_CHECK_FAILED", []),
                                 this.databaseQuery,
                                 "discoveredUser",
                                 "username",
