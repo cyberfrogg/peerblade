@@ -12,7 +12,7 @@ class ValidatePasswordSequenceNode extends SequenceNodeValidator {
         onFalseNode: SequenceNode,
         passwordRecord: string
     ) {
-        super(onTrueNode, onFalseNode, "validator", "validatePassword", undefined);
+        super(onTrueNode, onFalseNode, "validatePassword", undefined);
         this.passwordRecord = passwordRecord;
     }
 

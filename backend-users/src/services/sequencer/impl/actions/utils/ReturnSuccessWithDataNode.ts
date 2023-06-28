@@ -6,7 +6,7 @@ class ReturnSuccessWithDataNode extends SequenceNodeAction {
     readonly keysToOutput: string[];
 
     constructor(keysToOutput: string[]) {
-        super("action", "returnSuccessWithPreviousNodeData", undefined);
+        super("action", "returnSuccessWithData", undefined);
         this.keysToOutput = keysToOutput
     }
 
@@ -20,10 +20,7 @@ class ReturnSuccessWithDataNode extends SequenceNodeAction {
             }
         }
 
-        console.log("------------------------------")
         data.response.json(ApiResponseData.Success(dataToOutput));
-
-        await this.next(data);
     }
 }
 

@@ -19,7 +19,7 @@ class ValidateUserExistsSequenceNode extends SequenceNodeValidator {
         usernameToCheck: string,
         emailToCheck: string,
     ) {
-        super(onTrueNode, onFalseNode, "validator", "validateUserExists", onErrorNode);
+        super(onTrueNode, onFalseNode, "validateUserExists", onErrorNode);
         this.databaseQuery = databaseQuery;
 
         this.discoveredUserRecord = discoveredUserRecord;
@@ -30,6 +30,7 @@ class ValidateUserExistsSequenceNode extends SequenceNodeValidator {
     execute = async (data: SequenceNodeExecuteData): Promise<void> => {
         try {
             const queryResult = await this.databaseQuery
+                .build()
                 .selectAllFrom("users")
                 .where("username = ? OR email = ?")
                 .execute([data.data[this.usernameToCheck], data.data[this.emailToCheck]]);

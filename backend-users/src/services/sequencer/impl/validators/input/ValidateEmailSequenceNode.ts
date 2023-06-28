@@ -13,7 +13,7 @@ class ValidateEmailSequenceNode extends SequenceNodeValidator {
         onFalseNode: SequenceNode,
         emailRecord: string
     ) {
-        super(onTrueNode, onFalseNode, "validator", "validateEmail", undefined);
+        super(onTrueNode, onFalseNode, "validateEmail", undefined);
         this.emailRecord = emailRecord;
     }
 

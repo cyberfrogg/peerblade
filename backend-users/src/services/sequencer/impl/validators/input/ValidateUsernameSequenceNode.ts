@@ -12,7 +12,7 @@ class ValidateUsernameSequenceNode extends SequenceNodeValidator {
         onFalseNode: SequenceNode,
         usernameRecord: string
     ) {
-        super(onTrueNode, onFalseNode, "validator", "validateUsername", undefined);
+        super(onTrueNode, onFalseNode, "validateUsername", undefined);
         this.usernameRecord = usernameRecord;
     }
 

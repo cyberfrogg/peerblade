@@ -22,8 +22,6 @@ class ReturnErrCodeSequenceNode extends SequenceNodeAction {
         }
 
         data.response.json(ApiResponseData.Error(this.errcode, dataToOutput));
-
-        await this.next(data);
     }
 }
 

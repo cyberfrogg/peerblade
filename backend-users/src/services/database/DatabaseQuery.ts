@@ -14,6 +14,19 @@ class DatabaseQuery {
         });
     }
 
+    build = (): DatabaseQueryBuilder => {
+        return new DatabaseQueryBuilder(this.mysql);
+    }
+}
+
+class DatabaseQueryBuilder {
+    constructedQuery: string = ""
+    readonly mysql: ServerlessMysql;
+
+    constructor(mysql: ServerlessMysql) {
+        this.mysql = mysql;
+    }
+
     selectAllFrom = (tableName: string): DatabaseQuerySelectAllFrom => {
         this.constructedQuery += "SELECT * FROM `" + tableName + "` "
         let selectAllFrom = new DatabaseQuerySelectAllFrom(this);
@@ -22,9 +35,9 @@ class DatabaseQuery {
 }
 
 class DatabaseQuerySelectAllFrom {
-    private readonly self: DatabaseQuery;
+    private readonly self: DatabaseQueryBuilder;
 
-    constructor(self: DatabaseQuery) {
+    constructor(self: DatabaseQueryBuilder) {
         this.self = self;
     }
 
@@ -36,9 +49,9 @@ class DatabaseQuerySelectAllFrom {
 }
 
 class DatabaseQueryWhere {
-    private readonly self: DatabaseQuery;
+    private readonly self: DatabaseQueryBuilder;
 
-    constructor(self: DatabaseQuery) {
+    constructor(self: DatabaseQueryBuilder) {
         this.self = self;
     }
 

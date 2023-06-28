@@ -8,11 +8,10 @@ class SequenceNodeValidator extends SequenceNode {
     constructor(
         onTrueNode: SequenceNode,
         onFalseNode: SequenceNode,
-        type: string,
         name: string,
         onErrorNode: SequenceNode | undefined
     ) {
-        super("validator", "validateUserCreateInput", onErrorNode);
+        super("validator", name, onErrorNode);
         this.onTrueNode = onTrueNode;
         this.onFalseNode = onFalseNode;
     }
