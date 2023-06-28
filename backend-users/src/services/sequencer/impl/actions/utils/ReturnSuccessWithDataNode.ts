@@ -1,12 +1,12 @@
-import SequenceNodeAction from "../../SequenceNodeAction";
-import SequenceNodeExecuteData from "../../SequenceNodeExecuteData";
-import ApiResponseData from "../../utils/ApiResponseData";
+import SequenceNodeAction from "../../../SequenceNodeAction";
+import SequenceNodeExecuteData from "../../../SequenceNodeExecuteData";
+import ApiResponseData from "../../../utils/ApiResponseData";
 
-class ReturnSuccessWithPreviousNodeDataNode extends SequenceNodeAction {
+class ReturnSuccessWithDataNode extends SequenceNodeAction {
     readonly keysToOutput: string[];
 
     constructor(keysToOutput: string[]) {
-        super("action", "returnSuccessWithPreviousNodeData");
+        super("action", "returnSuccessWithPreviousNodeData", undefined);
         this.keysToOutput = keysToOutput
     }
 
@@ -26,4 +26,4 @@ class ReturnSuccessWithPreviousNodeDataNode extends SequenceNodeAction {
     }
 }
 
-export default ReturnSuccessWithPreviousNodeDataNode;
+export default ReturnSuccessWithDataNode;

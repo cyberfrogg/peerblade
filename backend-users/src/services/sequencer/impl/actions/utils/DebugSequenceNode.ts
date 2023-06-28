@@ -1,11 +1,11 @@
-import SequenceNodeAction from "../../SequenceNodeAction";
-import SequenceNodeExecuteData from "../../SequenceNodeExecuteData";
+import SequenceNodeAction from "../../../SequenceNodeAction";
+import SequenceNodeExecuteData from "../../../SequenceNodeExecuteData";
 
 class DebugSequenceNode extends SequenceNodeAction {
     message: string = "message";
 
     constructor(message: string) {
-        super("action", "debug");
+        super("action", "debug", undefined);
         this.message = message;
     }
 

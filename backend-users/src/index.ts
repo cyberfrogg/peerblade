@@ -5,6 +5,8 @@ import IRoute from "./services/routes/IRoute";
 import LoggerService from './services/logger/impl/LoggerService';
 import ILoggerService from "./services/logger/ILoggerService";
 import PostUserCreateRoute from "./routes/api/v1/user/PostUserCreateRoute";
+import DatabaseQuery from "./services/database/DatabaseQuery";
+import DatabaseConfig from "./services/database/DatabaseConfig";
 const cors = require('cors');
 
 
@@ -19,7 +21,8 @@ app.use(cors({
 
 const initializeApp = async () => {
     const logger = new LoggerService();
-    const routes = createRoutes(logger);
+    const databaseQuery = await createDatabaseQuery();
+    const routes = createRoutes(logger, databaseQuery);
 
     // start express listening
     const appPort = process.env.PORT
@@ -29,10 +32,10 @@ const initializeApp = async () => {
 }
 
 // create routes
-const createRoutes = async (logger: ILoggerService): Promise<Array<IRoute>> => {
+const createRoutes = async (logger: ILoggerService, databaseQuery: DatabaseQuery): Promise<Array<IRoute>> => {
     let routes = new Array<IRoute>();
     routes.push(new GetPingRoute("/api/v1/ping"));
-    routes.push(new PostUserCreateRoute("/api/v1/user/create"));
+    routes.push(new PostUserCreateRoute("/api/v1/user/create", databaseQuery));
 
     // initialize routes
     for (const route of routes) {
@@ -43,5 +46,21 @@ const createRoutes = async (logger: ILoggerService): Promise<Array<IRoute>> => {
     logger.log(`\x1b[32mAll routes are initialized! \x1b[0m`);
     return routes;
 }
+
+// create database query
+const createDatabaseQuery = async (): Promise<DatabaseQuery> => {
+    const config = new DatabaseConfig(
+        process.env.DB_HOST as string,
+        Number.parseInt(process.env.DB_POPT as string),
+        process.env.DB_NAME as string,
+        process.env.DB_USER as string,
+        process.env.DB_PASS as string,
+        process.env.DB_IS_DEBUG == "true",
+        process.env.DB_IS_TRACE == "true"
+    );
+
+    return new DatabaseQuery(config);
+}
+
 
 initializeApp();

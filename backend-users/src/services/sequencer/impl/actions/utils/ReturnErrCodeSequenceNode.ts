@@ -1,13 +1,13 @@
-import SequenceNodeAction from "../../SequenceNodeAction";
-import SequenceNodeExecuteData from "../../SequenceNodeExecuteData";
-import ApiResponseData from "../../utils/ApiResponseData";
+import SequenceNodeAction from "../../../SequenceNodeAction";
+import SequenceNodeExecuteData from "../../../SequenceNodeExecuteData";
+import ApiResponseData from "../../../utils/ApiResponseData";
 
 class ReturnErrCodeSequenceNode extends SequenceNodeAction {
     readonly errcode: string = "ERRCODE_UNKNOWN";
     readonly keysToOutput: string[];
 
     constructor(errcode: string, keysToOutput: string[]) {
-        super("action", "returnErrCode");
+        super("action", "returnErrCode", undefined);
         this.errcode = errcode;
         this.keysToOutput = keysToOutput
     }

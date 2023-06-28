@@ -1,8 +1,8 @@
 import { Express, Request, Response } from "express";
 import IRoute from "../../../services/routes/IRoute";
-import StartSequenceNode from "../../../services/sequencer/impl/actions/StartSequenceNode";
+import StartSequenceNode from "../../../services/sequencer/impl/actions/utils/StartSequenceNode";
 import SequenceNodeExecuteData from "../../../services/sequencer/SequenceNodeExecuteData";
-import ReturnSuccessWithPreviousNodeDataNode from "../../../services/sequencer/impl/actions/ReturnSuccessWithPreviousNodeDataNode";
+import ReturnSuccessWithDataNode from "../../../services/sequencer/impl/actions/utils/ReturnSuccessWithDataNode";
 
 class GetPingRoute implements IRoute {
     readonly path: string;
@@ -15,7 +15,7 @@ class GetPingRoute implements IRoute {
 
         let firstNode = new StartSequenceNode();
         firstNode
-            .append(new ReturnSuccessWithPreviousNodeDataNode([]))
+            .append(new ReturnSuccessWithDataNode([]))
 
         expressApp.get(this.path, (req: Request, res: Response) => {
             firstNode.execute(SequenceNodeExecuteData.empty(req, res))
