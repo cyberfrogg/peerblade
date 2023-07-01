@@ -10,6 +10,7 @@ import PopulateRequestInputFieldsInRecordsSequenceNode from "../../../../service
 import ValidateUsernameSequenceNode from "../../../../services/sequencer/impl/validators/input/ValidateUsernameSequenceNode";
 import ValidatePasswordSequenceNode from "../../../../services/sequencer/impl/validators/input/ValidatePasswordSequenceNode";
 import ValidateEmailSequenceNode from "../../../../services/sequencer/impl/validators/input/ValidateEmailSequenceNode";
+import CreateUserSequenceNode from "../../../../services/sequencer/impl/actions/CreateUserSequenceNode";
 
 class PostUserCreateRoute implements IRoute {
     readonly path: string;
@@ -22,6 +23,18 @@ class PostUserCreateRoute implements IRoute {
 
     initialize = async (expressApp: Express): Promise<void> => {
 
+        let createUserNode = new CreateUserSequenceNode(
+            new ReturnErrCodeSequenceNode("ERRCODE_USER_CREATE_FAILED", []),
+            this.databaseQuery,
+            "username",
+            "email",
+            "password",
+            "createdUser"
+        );
+        createUserNode.append(
+            new ReturnSuccessWithDataNode([])
+        );
+
         let firstNode = new StartSequenceNode();
         firstNode
             .append(
@@ -33,7 +46,7 @@ class PostUserCreateRoute implements IRoute {
                         new ValidateEmailSequenceNode(
                             new ValidateUserExistsSequenceNode(
                                 new ReturnErrCodeSequenceNode("ERRCODE_USER_EXISTS", []),
-                                new ReturnSuccessWithDataNode([]),
+                                createUserNode,
                                 new ReturnErrCodeSequenceNode("ERRCODE_USER_EXISTS_CHECK_FAILED", []),
                                 this.databaseQuery,
                                 "discoveredUser",

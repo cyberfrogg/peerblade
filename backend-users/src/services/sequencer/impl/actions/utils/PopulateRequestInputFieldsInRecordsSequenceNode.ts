@@ -5,7 +5,7 @@ class PopulateRequestInputFieldsInRecordsSequenceNode extends SequenceNodeAction
     populateFields: string[];
 
     constructor(populateFields: string[]) {
-        super("action", "populateRequestInputFieldsInRecordsSequenceNode", undefined);
+        super("action", "populateRequestInputFieldsInRecords", undefined);
         this.populateFields = populateFields;
     }
 
