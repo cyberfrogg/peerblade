@@ -7,9 +7,8 @@ import ILoggerService from "./services/logger/ILoggerService";
 import PostUserCreateRoute from "./routes/api/v1/user/PostUserCreateRoute";
 import DatabaseQuery from "./services/database/DatabaseQuery";
 import DatabaseConfig from "./services/database/DatabaseConfig";
+
 const cors = require('cors');
-
-
 
 // express initializing
 const app = express();

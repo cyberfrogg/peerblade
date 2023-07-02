@@ -1,16 +1,24 @@
-import { Express, Request, Response } from "express";
+import {Express, Request, Response} from "express";
 import IRoute from "../../../../services/routes/IRoute";
 import StartSequenceNode from "../../../../services/sequencer/impl/actions/utils/StartSequenceNode";
 import SequenceNodeExecuteData from "../../../../services/sequencer/SequenceNodeExecuteData";
 import ReturnSuccessWithDataNode from "../../../../services/sequencer/impl/actions/utils/ReturnSuccessWithDataNode";
 import ReturnErrCodeSequenceNode from "../../../../services/sequencer/impl/actions/utils/ReturnErrCodeSequenceNode";
-import ValidateUserExistsSequenceNode from "../../../../services/sequencer/impl/validators/ValidateUserExistsSequenceNode";
+import ValidateUserExistsSequenceNode
+    from "../../../../services/sequencer/impl/validators/ValidateUserExistsSequenceNode";
 import DatabaseQuery from "../../../../services/database/DatabaseQuery";
-import PopulateRequestInputFieldsInRecordsSequenceNode from "../../../../services/sequencer/impl/actions/utils/PopulateRequestInputFieldsInRecordsSequenceNode";
-import ValidateUsernameSequenceNode from "../../../../services/sequencer/impl/validators/input/ValidateUsernameSequenceNode";
-import ValidatePasswordSequenceNode from "../../../../services/sequencer/impl/validators/input/ValidatePasswordSequenceNode";
+import PopulateRequestInputFieldsInRecordsSequenceNode
+    from "../../../../services/sequencer/impl/actions/utils/PopulateRequestInputFieldsInRecordsSequenceNode";
+import ValidateUsernameSequenceNode
+    from "../../../../services/sequencer/impl/validators/input/ValidateUsernameSequenceNode";
+import ValidatePasswordSequenceNode
+    from "../../../../services/sequencer/impl/validators/input/ValidatePasswordSequenceNode";
 import ValidateEmailSequenceNode from "../../../../services/sequencer/impl/validators/input/ValidateEmailSequenceNode";
 import CreateUserSequenceNode from "../../../../services/sequencer/impl/actions/CreateUserSequenceNode";
+import SendUserVerificationEmailSequenceNode
+    from "../../../../services/sequencer/impl/actions/SendUserVerificationEmailSequenceNode";
+import CreateUserEmailVerificationTokenSequenceNode
+    from "../../../../services/sequencer/impl/actions/CreateUserEmailVerificationTokenSequenceNode";
 
 class PostUserCreateRoute implements IRoute {
     readonly path: string;
@@ -22,7 +30,6 @@ class PostUserCreateRoute implements IRoute {
     }
 
     initialize = async (expressApp: Express): Promise<void> => {
-
         let createUserNode = new CreateUserSequenceNode(
             new ReturnErrCodeSequenceNode("ERRCODE_USER_CREATE_FAILED", []),
             this.databaseQuery,
@@ -31,7 +38,23 @@ class PostUserCreateRoute implements IRoute {
             "password",
             "createdUser"
         );
-        createUserNode.append(
+        createUserNode
+        .append(
+            new CreateUserEmailVerificationTokenSequenceNode(
+                new ReturnErrCodeSequenceNode("ERRCODE_USER_VERIFICATION_TOKEN_CREATE_FAILED", []),
+                this.databaseQuery,
+                "createdUser",
+                "userEmailVerificationToken"
+            )
+        )
+        .append(
+            new SendUserVerificationEmailSequenceNode(
+                new ReturnErrCodeSequenceNode("ERRCODE_USER_VERIFICATION_TOKEN_EMAIL_SEND_FAILED", []),
+                "createdUser",
+                "userEmailVerificationToken"
+            )
+        )
+        .append(
             new ReturnSuccessWithDataNode([])
         );
 

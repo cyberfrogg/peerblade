@@ -3,6 +3,7 @@ import SequenceNodeAction from "../../SequenceNodeAction";
 import SequenceNodeExecuteData from "../../SequenceNodeExecuteData";
 import DatabaseQuery from "../../../database/DatabaseQuery";
 import UserRow from "../../../../data/user/UserRow";
+import DatabaseTableKeys from "../../../../data/DatabaseTableKeys";
 
 class CreateUserSequenceNode extends SequenceNodeAction {
     readonly databaseQuery: DatabaseQuery;
@@ -37,7 +38,7 @@ class CreateUserSequenceNode extends SequenceNodeAction {
 
             const createQueryResult = await this.databaseQuery
                 .build()
-                .insertInto("users", ["uuid", "username", "email", "password"])
+                .insertInto(DatabaseTableKeys.Users, ["uuid", "username", "email", "password"])
                 .values([newUserUuid, username, email, password])
                 .execute();
 
@@ -47,7 +48,7 @@ class CreateUserSequenceNode extends SequenceNodeAction {
 
             const getUserQueryResult = await this.databaseQuery
                 .build()
-                .selectAllFrom("users")
+                .selectAllFrom(DatabaseTableKeys.Users)
                 .where("uuid = ?")
                 .execute([newUserUuid]);
 
