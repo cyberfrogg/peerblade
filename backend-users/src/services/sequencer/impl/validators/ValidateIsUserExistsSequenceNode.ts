@@ -2,8 +2,9 @@ import SequenceNodeValidator from "../../SequenceNodeValidator";
 import SequenceNodeExecuteData from "../../SequenceNodeExecuteData";
 import SequenceNode from "../../SequenceNode";
 import DatabaseQuery from "../../../database/DatabaseQuery";
+import DatabaseTableKeys from "../../../../data/DatabaseTableKeys";
 
-class ValidateUserExistsSequenceNode extends SequenceNodeValidator {
+class ValidateIsUserExistsSequenceNode extends SequenceNodeValidator {
     readonly databaseQuery: DatabaseQuery;
 
     readonly discoveredUserRecord: string;
@@ -31,11 +32,11 @@ class ValidateUserExistsSequenceNode extends SequenceNodeValidator {
         try {
             const queryResult = await this.databaseQuery
                 .build()
-                .selectAllFrom("users")
+                .selectAllFrom(DatabaseTableKeys.Users)
                 .where("username = ? OR email = ?")
                 .execute([data.data[this.usernameToCheck], data.data[this.emailToCheck]]);
 
-            if (queryResult.length == 0) {
+            if (queryResult == undefined || queryResult.length == 0 || queryResult[0] == undefined) {
                 await this.executeOnFalseNode(data);
                 return;
             }
@@ -50,4 +51,4 @@ class ValidateUserExistsSequenceNode extends SequenceNodeValidator {
     }
 }
 
-export default ValidateUserExistsSequenceNode;
+export default ValidateIsUserExistsSequenceNode;

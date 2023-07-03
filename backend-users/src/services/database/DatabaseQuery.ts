@@ -1,4 +1,4 @@
-import mysql, { ServerlessMysql } from "serverless-mysql";
+import mysql, {ServerlessMysql} from "serverless-mysql";
 import DatabaseConfig from "./DatabaseConfig";
 
 
@@ -49,6 +49,13 @@ class DatabaseQueryBuilder {
 
         let insertinto = new DatabaseQueryInsertInto(this);
         return insertinto;
+    }
+
+    deleteFrom = (tableName: string): DatabaseQueryDeleteFrom => {
+        this.constructedQuery += "DELETE FROM `" + tableName + "` ";
+
+        let deleteFrom = new DatabaseQueryDeleteFrom(this);
+        return deleteFrom;
     }
 
     getNextUuid = async (): Promise<string> => {
@@ -105,6 +112,20 @@ class DatabaseQueryInsertIntoValues {
     }
 }
 
+class DatabaseQueryInsertResponse {
+    fieldCount: number = 0
+    affectedRows: number = 0
+    insertId: number = 0;
+    serverStatu: number = 0;
+    warningCount: number = 0;
+    message: string = "";
+    changedRows: number = 0
+
+    static fromQueryResult = (queryResult: unknown) => {
+        return queryResult as DatabaseQueryInsertResponse;
+    }
+}
+
 
 class DatabaseQuerySelectAllFrom {
     private readonly self: DatabaseQueryBuilder;
@@ -115,12 +136,12 @@ class DatabaseQuerySelectAllFrom {
 
     where = (condition: string) => {
         this.self.constructedQuery += "WHERE " + condition;
-        let selectAllFromWhere = new DatabaseQueryWhere(this.self);
+        let selectAllFromWhere = new DatabaseQuerySelectWhere(this.self);
         return selectAllFromWhere;
     }
 }
 
-class DatabaseQueryWhere {
+class DatabaseQuerySelectWhere {
     private readonly self: DatabaseQueryBuilder;
 
     constructor(self: DatabaseQueryBuilder) {
@@ -133,17 +154,30 @@ class DatabaseQueryWhere {
     }
 }
 
-class DatabaseQueryInsertResponse {
-    fieldCount: number = 0
-    affectedRows: number = 0
-    insertId: number = 0;
-    serverStatu: number = 0;
-    warningCount: number = 0;
-    message: string = "";
-    changedRows: number = 0
+class DatabaseQueryDeleteFrom {
+    private readonly self: DatabaseQueryBuilder;
 
-    static fromQueryResult = (queryResult: unknown) => {
-        return queryResult as DatabaseQueryInsertResponse;
+    constructor(self: DatabaseQueryBuilder) {
+        this.self = self;
+    }
+
+    where = (condition: string) => {
+        this.self.constructedQuery += "WHERE " + condition;
+        let selectAllFromWhere = new DatabaseQueryDeleteWhere(this.self);
+        return selectAllFromWhere;
+    }
+}
+
+class DatabaseQueryDeleteWhere {
+    private readonly self: DatabaseQueryBuilder;
+
+    constructor(self: DatabaseQueryBuilder) {
+        this.self = self;
+    }
+
+    execute = async (values: any[]): Promise<any[]> => {
+        let queryResult = await this.self.mysql.query(this.self.constructedQuery, values) as any[];
+        return queryResult;
     }
 }
 

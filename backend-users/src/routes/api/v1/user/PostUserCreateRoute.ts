@@ -4,8 +4,8 @@ import StartSequenceNode from "../../../../services/sequencer/impl/actions/utils
 import SequenceNodeExecuteData from "../../../../services/sequencer/SequenceNodeExecuteData";
 import ReturnSuccessWithDataNode from "../../../../services/sequencer/impl/actions/utils/ReturnSuccessWithDataNode";
 import ReturnErrCodeSequenceNode from "../../../../services/sequencer/impl/actions/utils/ReturnErrCodeSequenceNode";
-import ValidateUserExistsSequenceNode
-    from "../../../../services/sequencer/impl/validators/ValidateUserExistsSequenceNode";
+import ValidateIsUserExistsSequenceNode
+    from "../../../../services/sequencer/impl/validators/ValidateIsUserExistsSequenceNode";
 import DatabaseQuery from "../../../../services/database/DatabaseQuery";
 import PopulateRequestInputFieldsInRecordsSequenceNode
     from "../../../../services/sequencer/impl/actions/utils/PopulateRequestInputFieldsInRecordsSequenceNode";
@@ -19,6 +19,10 @@ import SendUserVerificationEmailSequenceNode
     from "../../../../services/sequencer/impl/actions/SendUserVerificationEmailSequenceNode";
 import CreateUserEmailVerificationTokenSequenceNode
     from "../../../../services/sequencer/impl/actions/CreateUserEmailVerificationTokenSequenceNode";
+import SequenceNode from "../../../../services/sequencer/SequenceNode";
+import ValidateIsUserEmailVerifiedSequenceNode
+    from "../../../../services/sequencer/impl/validators/ValidateIsUserEmailVerifiedSequenceNode";
+import DeleteUserSequenceNode from "../../../../services/sequencer/impl/actions/DeleteUserSequenceNode";
 
 class PostUserCreateRoute implements IRoute {
     readonly path: string;
@@ -30,6 +34,60 @@ class PostUserCreateRoute implements IRoute {
     }
 
     initialize = async (expressApp: Express): Promise<void> => {
+        let createUserNode = this.getCreateUserNode();
+
+        let recreateUserOnEmailVerificationFalse = new DeleteUserSequenceNode(
+            createUserNode,
+            this.databaseQuery,
+            "discoveredUser"
+            );
+        recreateUserOnEmailVerificationFalse
+            .append(
+                createUserNode
+            )
+
+        let firstNode = new StartSequenceNode();
+        firstNode
+            .append(
+                new PopulateRequestInputFieldsInRecordsSequenceNode(["username", "email", "password"])
+            )
+            .append(
+                new ValidateUsernameSequenceNode(
+                    new ValidatePasswordSequenceNode(
+                        new ValidateEmailSequenceNode(
+                            new ValidateIsUserExistsSequenceNode(
+                                new ValidateIsUserEmailVerifiedSequenceNode(
+                                    new ReturnErrCodeSequenceNode("ERRCODE_USER_EXISTS", []),
+                                    recreateUserOnEmailVerificationFalse,
+                                    new ReturnErrCodeSequenceNode("ERRCODE_USER_IS_EMAIL_VERIFIED_CHECK_FAILED", []),
+                                    this.databaseQuery,
+                                    "discoveredUser",
+                                    "discoveredEmailVerificationToken"
+                                ),
+                                createUserNode,
+                                new ReturnErrCodeSequenceNode("ERRCODE_USER_EXISTS_CHECK_FAILED", []),
+                                this.databaseQuery,
+                                "discoveredUser",
+                                "username",
+                                "email"
+                            ),
+                            new ReturnErrCodeSequenceNode("ERRCODE_VALIDATION_FAIL_EMAIL", []),
+                            "email"
+                        ),
+                        new ReturnErrCodeSequenceNode("ERRCODE_VALIDATION_FAIL_PASSWORD", []),
+                        "password"
+                    ),
+                    new ReturnErrCodeSequenceNode("ERRCODE_VALIDATION_FAIL_USERNAME", []),
+                    "username"
+                )
+            )
+
+        expressApp.post(this.path, (req: Request, res: Response) => {
+            firstNode.execute(new SequenceNodeExecuteData("userCreateResponse", req, res, {}))
+        });
+    }
+
+    getCreateUserNode = (): SequenceNode => {
         let createUserNode = new CreateUserSequenceNode(
             new ReturnErrCodeSequenceNode("ERRCODE_USER_CREATE_FAILED", []),
             this.databaseQuery,
@@ -58,39 +116,9 @@ class PostUserCreateRoute implements IRoute {
             new ReturnSuccessWithDataNode([])
         );
 
-        let firstNode = new StartSequenceNode();
-        firstNode
-            .append(
-                new PopulateRequestInputFieldsInRecordsSequenceNode(["username", "email", "password"])
-            )
-            .append(
-                new ValidateUsernameSequenceNode(
-                    new ValidatePasswordSequenceNode(
-                        new ValidateEmailSequenceNode(
-                            new ValidateUserExistsSequenceNode(
-                                new ReturnErrCodeSequenceNode("ERRCODE_USER_EXISTS", []),
-                                createUserNode,
-                                new ReturnErrCodeSequenceNode("ERRCODE_USER_EXISTS_CHECK_FAILED", []),
-                                this.databaseQuery,
-                                "discoveredUser",
-                                "username",
-                                "email"
-                            ),
-                            new ReturnErrCodeSequenceNode("ERRCODE_VALIDATION_FAIL_EMAIL", []),
-                            "email"
-                        ),
-                        new ReturnErrCodeSequenceNode("ERRCODE_VALIDATION_FAIL_PASSWORD", []),
-                        "password"
-                    ),
-                    new ReturnErrCodeSequenceNode("ERRCODE_VALIDATION_FAIL_USERNAME", []),
-                    "username"
-                )
-            )
-
-        expressApp.post(this.path, (req: Request, res: Response) => {
-            firstNode.execute(new SequenceNodeExecuteData("userCreateResponse", req, res, {}))
-        });
+        return createUserNode;
     }
 }
+
 
 export default PostUserCreateRoute;
