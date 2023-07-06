@@ -31,8 +31,6 @@ class CreateUserEmailVerificationTokenSequenceNode extends SequenceNodeAction {
             const newTokenUuid = await this.databaseQuery.build().getNextUuid();
             const token = HashString(newTokenUuid + GenerateRandomString(200));
 
-            console.log("Say again fucker");
-
             const createQueryResult = await this.databaseQuery.build()
                 .insertInto(DatabaseTableKeys.EmailVerificationTokens, ["uuid", "useruuid", "token", "isverified"])
                 .values([newTokenUuid, user.uuid, token, 0])

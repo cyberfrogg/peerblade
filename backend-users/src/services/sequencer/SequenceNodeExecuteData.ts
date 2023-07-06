@@ -3,18 +3,16 @@ import { Request, Response } from 'express';
 class SequenceNodeExecuteData {
     request: Request
     response: Response;
-    type: string;
     data: Record<string, any> = {};
 
-    constructor(type: string, request: Request, response: Response, data?: Record<string, any>) {
-        this.type = type;
+    constructor(request: Request, response: Response, data?: Record<string, any>) {
         this.request = request;
         this.response = response;
-        this.data = arguments[3];
+        this.data = arguments[2];
     }
 
     static empty(request: Request, response: Response): SequenceNodeExecuteData {
-        return new SequenceNodeExecuteData("empty", request, response);
+        return new SequenceNodeExecuteData(request, response, {});
     }
 }
 

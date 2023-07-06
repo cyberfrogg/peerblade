@@ -83,7 +83,7 @@ class PostUserCreateRoute implements IRoute {
             )
 
         expressApp.post(this.path, (req: Request, res: Response) => {
-            firstNode.execute(new SequenceNodeExecuteData("userCreateResponse", req, res, {}))
+            firstNode.execute(SequenceNodeExecuteData.empty(req, res))
         });
     }
 

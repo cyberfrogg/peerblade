@@ -1,4 +1,5 @@
 import axios from "axios";
+import crypto from "crypto";
 
 class TestFrameworkTest {
     name: string = "";
@@ -27,12 +28,8 @@ class TestFrameworkTest {
         });
     }
     post = async (url: string, data: any): Promise<any> => {
-        return axios.post(url, null, {
-            params: data,
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+        console.log(url);
+        return axios.post(url, data);
     }
     assertResponseJsonContent = async (response: any, expected: any): Promise<TestFrameworkTest> => {
         const expectedJson = JSON.stringify(expected);
@@ -45,6 +42,10 @@ class TestFrameworkTest {
         }
 
         return this;
+    }
+
+    randomString = (length: number): string => {
+        return crypto.randomBytes(length).toString("hex");
     }
 }
 
