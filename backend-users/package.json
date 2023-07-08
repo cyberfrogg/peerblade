@@ -11,7 +11,7 @@
     "author": "",
     "license": "GNU General Public License",
     "devDependencies": {
-        "@types/node": "^20.3.3",
+        "@types/node": "^20.4.1",
         "nodemon": "^2.0.21"
     },
     "dependencies": {

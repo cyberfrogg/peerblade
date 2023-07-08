@@ -1,14 +1,14 @@
 import crypto from "crypto";
 
-const GenerateRandomString = (length: number) => {
+const GenerateRandomString = (length: number): string => {
     return crypto.randomBytes(length).toString("hex");
 }
 
-const HashString = (value: string) => {
+const HashString = (value: string): string => {
     return crypto.createHash('sha256').update(value).digest('hex').toString();
 }
 
-const HashStringWithSalt = (value: string, salt: string) => {
+const HashStringWithSalt = (value: string, salt: string): string => {
     return HashString(salt + value);
 }
 

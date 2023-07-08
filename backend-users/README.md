@@ -23,3 +23,13 @@ CREATE TABLE emailVerificationTokens (
     FOREIGN KEY (useruuid) REFERENCES users(uuid)
 );
 ```
+```sql
+CREATE TABLE sessions (
+    uuid VARCHAR(36) DEFAULT "" NOT NULL,
+    useruuid VARCHAR(36) DEFAULT "" NOT NULL,
+    token VARCHAR(500) DEFAULT "" NOT NULL,
+    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (uuid),
+    FOREIGN KEY (useruuid) REFERENCES users(uuid)
+);
+```
