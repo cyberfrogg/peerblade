@@ -1,4 +1,4 @@
-# Backend Users
+# PeerBlade Backend Users
 
 ## Setup MySQL DB
 
