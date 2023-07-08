@@ -38,7 +38,7 @@ class CreateUserSequenceNode extends SequenceNodeAction {
             await this.next(data);
         }
         catch (e) {
-            await this.executeOnErrorNode("Failed to create user. Error message: " + e, data);
+            await this.executeOnErrorNode("Failed to delete user. Error message: " + e, data);
         }
     }
 }

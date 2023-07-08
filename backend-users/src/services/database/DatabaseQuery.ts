@@ -29,8 +29,7 @@ class DatabaseQueryBuilder {
 
     selectAllFrom = (tableName: string): DatabaseQuerySelectAllFrom => {
         this.constructedQuery += "SELECT * FROM `" + tableName + "` "
-        let selectAllFrom = new DatabaseQuerySelectAllFrom(this);
-        return selectAllFrom;
+        return new DatabaseQuerySelectAllFrom(this);
     }
 
     insertInto = (tableName: string, columns: string[]): DatabaseQueryInsertInto => {
@@ -47,15 +46,19 @@ class DatabaseQueryBuilder {
         }
         this.constructedQuery += "(" + columnsString + ") ";
 
-        let insertinto = new DatabaseQueryInsertInto(this);
-        return insertinto;
+        return new DatabaseQueryInsertInto(this);
+    }
+
+    update = (tableName: string): DatabaseQueryUpdate => {
+        this.constructedQuery += "UPDATE " + tableName + " SET ";
+
+        return new DatabaseQueryUpdate(this);
     }
 
     deleteFrom = (tableName: string): DatabaseQueryDeleteFrom => {
         this.constructedQuery += "DELETE FROM `" + tableName + "` ";
 
-        let deleteFrom = new DatabaseQueryDeleteFrom(this);
-        return deleteFrom;
+        return new DatabaseQueryDeleteFrom(this);
     }
 
     getNextUuid = async (): Promise<string> => {
@@ -92,8 +95,7 @@ class DatabaseQueryInsertInto {
         }
         this.self.constructedQuery += "VALUES (" + valuesString + ");";
 
-        let insertIntoValues = new DatabaseQueryInsertIntoValues(this.self, values);
-        return insertIntoValues;
+        return new DatabaseQueryInsertIntoValues(this.self, values);
     }
 }
 
@@ -116,7 +118,7 @@ class DatabaseQueryInsertResponse {
     fieldCount: number = 0
     affectedRows: number = 0
     insertId: number = 0;
-    serverStatu: number = 0;
+    serverStatus: number = 0;
     warningCount: number = 0;
     message: string = "";
     changedRows: number = 0
@@ -134,14 +136,31 @@ class DatabaseQuerySelectAllFrom {
         this.self = self;
     }
 
-    where = (condition: string) => {
+    where = (condition: string): DatabaseQuerySelectWhere => {
         this.self.constructedQuery += "WHERE " + condition;
-        let selectAllFromWhere = new DatabaseQuerySelectWhere(this.self);
-        return selectAllFromWhere;
+        return new DatabaseQuerySelectWhere(this.self);
     }
 }
 
 class DatabaseQuerySelectWhere {
+    private readonly self: DatabaseQueryBuilder;
+
+    constructor(self: DatabaseQueryBuilder) {
+        this.self = self;
+    }
+
+    limit = (limit: Number): DatabaseQuerySelectWhereLimit => {
+        this.self.constructedQuery += "LIMIT " + limit;
+        return new DatabaseQuerySelectWhereLimit(this.self);
+    }
+
+    execute = async (values: any[]): Promise<any[]> => {
+        let queryResult = await this.self.mysql.query(this.self.constructedQuery, values) as any[];
+        return queryResult;
+    }
+}
+
+class DatabaseQuerySelectWhereLimit {
     private readonly self: DatabaseQueryBuilder;
 
     constructor(self: DatabaseQueryBuilder) {
@@ -153,6 +172,7 @@ class DatabaseQuerySelectWhere {
         return queryResult;
     }
 }
+
 
 class DatabaseQueryDeleteFrom {
     private readonly self: DatabaseQueryBuilder;
@@ -181,5 +201,37 @@ class DatabaseQueryDeleteWhere {
     }
 }
 
+class DatabaseQueryUpdate{
+    private readonly self: DatabaseQueryBuilder;
+
+    constructor(self: DatabaseQueryBuilder) {
+        this.self = self;
+    }
+
+    column = (column: string): DatabaseQueryUpdate=> {
+        this.self.constructedQuery += column + " = ?, ";
+        return this;
+    }
+
+    where = (whereCondition: string): DatabaseQueryUpdateWhere => {
+        this.self.constructedQuery = this.self.constructedQuery.slice(0, -2) + " ";
+        this.self.constructedQuery += "WHERE " + whereCondition + " ";
+
+        return new DatabaseQueryUpdateWhere(this.self);
+    }
+}
+
+class DatabaseQueryUpdateWhere {
+    private readonly self: DatabaseQueryBuilder;
+
+    constructor(self: DatabaseQueryBuilder) {
+        this.self = self;
+    }
+
+    execute = async (values: any[]): Promise<any[]> => {
+        let queryResult = await this.self.mysql.query(this.self.constructedQuery, values) as any[];
+        return queryResult;
+    }
+}
 
 export default DatabaseQuery;

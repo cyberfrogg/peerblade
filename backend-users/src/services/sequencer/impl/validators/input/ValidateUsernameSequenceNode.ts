@@ -2,6 +2,7 @@ import SequenceNodeValidator from "../../../SequenceNodeValidator";
 import SequenceNodeExecuteData from "../../../SequenceNodeExecuteData";
 import SequenceNode from "../../../SequenceNode";
 import RangeVal from "../../../../utils/RangeVal";
+import {REGEX_NICKNAME_TEST} from "../../../../utils/RegexPalletes";
 
 class ValidateUsernameSequenceNode extends SequenceNodeValidator {
     readonly usernameRange: RangeVal = new RangeVal(4, 30);
@@ -21,6 +22,11 @@ class ValidateUsernameSequenceNode extends SequenceNodeValidator {
             const username = data.data[this.usernameRecord];
 
             if (username == undefined || !this.usernameRange.IsStringInRange(username)) {
+                await this.executeOnFalseNode(data);
+                return;
+            }
+
+            if (!REGEX_NICKNAME_TEST.test(username)) {
                 await this.executeOnFalseNode(data);
                 return;
             }

@@ -1,3 +1,5 @@
+import PostUserVerifyEmailRoute from "./routes/api/v1/user/PostUserVerifyEmailRoute";
+
 require('dotenv').config({ path: '.env' });
 import express from "express";
 import GetPingRoute from "./routes/api/v1/GetPingRoute";
@@ -21,7 +23,7 @@ app.use(cors({
 const initializeApp = async () => {
     const logger = new LoggerService();
     const databaseQuery = await createDatabaseQuery();
-    const routes = createRoutes(logger, databaseQuery);
+    await createRoutes(logger, databaseQuery);
 
     // start express listening
     const appPort = process.env.PORT
@@ -35,6 +37,7 @@ const createRoutes = async (logger: ILoggerService, databaseQuery: DatabaseQuery
     let routes = new Array<IRoute>();
     routes.push(new GetPingRoute("/api/v1/ping"));
     routes.push(new PostUserCreateRoute("/api/v1/user/create", databaseQuery));
+    routes.push(new PostUserVerifyEmailRoute("/api/v1/user/verifyemail", databaseQuery));
 
     // initialize routes
     for (const route of routes) {

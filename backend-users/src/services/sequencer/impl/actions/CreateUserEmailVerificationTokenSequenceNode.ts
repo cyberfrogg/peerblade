@@ -18,7 +18,7 @@ class CreateUserEmailVerificationTokenSequenceNode extends SequenceNodeAction {
         userRecord: string,
         outputVerificationTokenRecord: string
     ) {
-        super("action", "createUser", onErrorNode);
+        super("action", "createUserEmailVerificationToken", onErrorNode);
         this.databaseQuery = databaseQuery;
         this.userRecord = userRecord;
         this.outputVerificationTokenRecord = outputVerificationTokenRecord;
