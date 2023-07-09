@@ -23,6 +23,8 @@ import SequenceNode from "../../../../services/sequencer/SequenceNode";
 import ValidateIsUserEmailVerifiedSequenceNode
     from "../../../../services/sequencer/impl/validators/ValidateIsUserEmailVerifiedSequenceNode";
 import DeleteUserSequenceNode from "../../../../services/sequencer/impl/actions/DeleteUserSequenceNode";
+import HashWithSaltPasswordSequenceNode
+    from "../../../../services/sequencer/impl/actions/HashWithSaltPasswordSequenceNode";
 
 class PostUserCreateRoute implements IRoute {
     readonly path: string;
@@ -44,7 +46,28 @@ class PostUserCreateRoute implements IRoute {
         recreateUserOnEmailVerificationFalse
             .append(
                 createUserNode
+            );
+
+        let validateUserAllowedToBeCreatedThenCreateUser =
+            new HashWithSaltPasswordSequenceNode("password");
+        validateUserAllowedToBeCreatedThenCreateUser.append(
+            new ValidateIsUserExistsSequenceNode(
+                new ValidateIsUserEmailVerifiedSequenceNode(
+                    new ReturnErrCodeSequenceNode("ERRCODE_USER_EXISTS", []),
+                    recreateUserOnEmailVerificationFalse,
+                    new ReturnErrCodeSequenceNode("ERRCODE_USER_IS_EMAIL_VERIFIED_CHECK_FAILED", []),
+                    this.databaseQuery,
+                    "discoveredUser",
+                    "discoveredEmailVerificationToken"
+                ),
+                createUserNode,
+                new ReturnErrCodeSequenceNode("ERRCODE_USER_EXISTS_CHECK_FAILED", []),
+                this.databaseQuery,
+                "discoveredUser",
+                "username",
+                "email"
             )
+        );
 
         let firstNode = new StartSequenceNode();
         firstNode
@@ -55,22 +78,7 @@ class PostUserCreateRoute implements IRoute {
                 new ValidateUsernameSequenceNode(
                     new ValidatePasswordSequenceNode(
                         new ValidateEmailSequenceNode(
-                            new ValidateIsUserExistsSequenceNode(
-                                new ValidateIsUserEmailVerifiedSequenceNode(
-                                    new ReturnErrCodeSequenceNode("ERRCODE_USER_EXISTS", []),
-                                    recreateUserOnEmailVerificationFalse,
-                                    new ReturnErrCodeSequenceNode("ERRCODE_USER_IS_EMAIL_VERIFIED_CHECK_FAILED", []),
-                                    this.databaseQuery,
-                                    "discoveredUser",
-                                    "discoveredEmailVerificationToken"
-                                ),
-                                createUserNode,
-                                new ReturnErrCodeSequenceNode("ERRCODE_USER_EXISTS_CHECK_FAILED", []),
-                                this.databaseQuery,
-                                "discoveredUser",
-                                "username",
-                                "email"
-                            ),
+                            validateUserAllowedToBeCreatedThenCreateUser,
                             new ReturnErrCodeSequenceNode("ERRCODE_VALIDATION_FAIL_EMAIL", []),
                             "email"
                         ),
