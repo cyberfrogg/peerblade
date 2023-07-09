@@ -42,7 +42,7 @@ class ValidateIsUserEmailVerifiedSequenceNode extends SequenceNodeValidator {
             const row = queryResult[0] as EmailVerificationTokenRow;
             data.data[this.discoveredEmailVerificationTokenRecord] = row;
 
-            if(row.isVerified == 1){
+            if(row.isverified == 1){
                 await this.executeOnTrueNode(data);
                 return;
             }

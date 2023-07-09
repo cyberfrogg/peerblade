@@ -36,7 +36,7 @@ class VerifyUserEmailSequenceNode extends SequenceNodeAction {
 
             // check if user email token already verified
             const tokenRow = tokenGetQueryResult[0] as EmailVerificationTokenRow;
-            if(tokenRow.isVerified){
+            if(tokenRow.isverified){
                 throw new Error(tokenRow.useruuid + " Already verificated");
             }
 
