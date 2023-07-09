@@ -10,6 +10,7 @@ class DebugSequenceNode extends SequenceNodeAction {
     }
 
     execute = async (data: SequenceNodeExecuteData): Promise<void> => {
+        // could use ILoggerService
         console.log(this.message);
         await this.next(data);
     }
