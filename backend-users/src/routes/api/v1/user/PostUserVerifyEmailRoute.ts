@@ -10,6 +10,9 @@ import ValidateVerificationTokenSequenceNode
 import VerifyUserEmailSequenceNode from "../../../../services/sequencer/impl/actions/VerifyUserEmailSequenceNode";
 import SequenceNode from "../../../../services/sequencer/SequenceNode";
 import ReturnSuccessWithDataNode from "../../../../services/sequencer/impl/actions/utils/ReturnSuccessWithDataNode";
+import CreateSessionSequenceNode from "../../../../services/sequencer/impl/actions/CreateSessionSequenceNode";
+import GetUserByEmailVerificationTokenSequenceNode
+    from "../../../../services/sequencer/impl/actions/GetUserByEmailVerificationTokenSequenceNode";
 
 class PostUserVerifyEmailRoute implements IRoute {
     readonly path: string;
@@ -25,6 +28,14 @@ class PostUserVerifyEmailRoute implements IRoute {
         firstNode
             .append(
                 new PopulateRequestInputFieldsInRecordsSequenceNode(["verificationToken"])
+            )
+            .append(
+                new GetUserByEmailVerificationTokenSequenceNode(
+                    new ReturnErrCodeSequenceNode("ERRCODE_USER_NOT_FOUND", []),
+                    this.databaseQuery,
+                    "verificationToken",
+                    "user"
+                )
             )
             .append(
                 new ValidateVerificationTokenSequenceNode(
@@ -45,9 +56,16 @@ class PostUserVerifyEmailRoute implements IRoute {
             this.databaseQuery,
             "verificationToken"
         );
-
         verifyNode.append(
-            new ReturnSuccessWithDataNode([])
+            new CreateSessionSequenceNode(
+                new ReturnErrCodeSequenceNode("ERRCODE_CREATE_SESSION_FAILED", []),
+                this.databaseQuery,
+                "user",
+                "session"
+            )
+        )
+        .append(
+            new ReturnSuccessWithDataNode(["session"])
         );
 
         return verifyNode;
