@@ -11,8 +11,9 @@ class SaltValuePair {
         this.Value = value;
     }
 
-    static Create(salt: string, value: string) {
-        return new SaltValuePair(salt, value);
+    static CreateFromSalt(salt: string, value: string) {
+        let hash = HashStringWithSalt(value, salt);
+        return new SaltValuePair(salt, hash);
     }
 
     static CreateSaltAndHashValue(value: string) {

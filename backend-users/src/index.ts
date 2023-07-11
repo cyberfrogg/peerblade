@@ -9,6 +9,7 @@ import ILoggerService from "./services/logger/ILoggerService";
 import PostUserCreateRoute from "./routes/api/v1/user/PostUserCreateRoute";
 import DatabaseQuery from "./services/database/DatabaseQuery";
 import DatabaseConfig from "./services/database/DatabaseConfig";
+import PostUserLoginRoute from "./routes/api/v1/user/PostUserLoginRoute";
 
 const cors = require('cors');
 
@@ -38,6 +39,7 @@ const createRoutes = async (logger: ILoggerService, databaseQuery: DatabaseQuery
     routes.push(new GetPingRoute("/api/v1/ping"));
     routes.push(new PostUserCreateRoute("/api/v1/user/create", databaseQuery));
     routes.push(new PostUserVerifyEmailRoute("/api/v1/user/verifyemail", databaseQuery));
+    routes.push(new PostUserLoginRoute("/api/v1/user/login", databaseQuery));
 
     // initialize routes
     for (const route of routes) {
