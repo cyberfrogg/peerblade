@@ -7,12 +7,13 @@ import DatabaseQuery from "../../../../services/database/DatabaseQuery";
 import PopulateRequestInputFieldsInRecordsSequenceNode from "../../../../services/sequencer/impl/actions/utils/PopulateRequestInputFieldsInRecordsSequenceNode";
 import GetUserByEmailSequenceNode from "../../../../services/sequencer/impl/actions/GetUserByEmailSequenceNode";
 import GetUserByUsernameSequenceNode from "../../../../services/sequencer/impl/actions/GetUserByUsernameSequenceNode";
-import ExtractPasswordSaltValueFromUserSequenceNode
-    from "../../../../services/sequencer/impl/actions/ExtractPasswordSaltValueFromUserSequenceNode";
-import BooleanEquationSequenceNode
-    from "../../../../services/sequencer/impl/validators/utils/BooleanEquationSequenceNode";
+import ExtractPasswordSaltValueFromUserSequenceNode from "../../../../services/sequencer/impl/actions/ExtractPasswordSaltValueFromUserSequenceNode";
+import BooleanEquationSequenceNode from "../../../../services/sequencer/impl/validators/utils/BooleanEquationSequenceNode";
 import SaltValuePair from "../../../../services/utils/SaltValuePair";
 import ReturnSuccessWithDataNode from "../../../../services/sequencer/impl/actions/utils/ReturnSuccessWithDataNode";
+import HashFromSaltValueSequenceNode from "../../../../services/sequencer/impl/actions/HashFromSaltValueSequenceNode";
+import CreateSessionSequenceNode from "../../../../services/sequencer/impl/actions/CreateSessionSequenceNode";
+import SequenceNode from "../../../../services/sequencer/SequenceNode";
 
 class PostUserLoginRoute implements IRoute {
     readonly path: string;
@@ -24,24 +25,22 @@ class PostUserLoginRoute implements IRoute {
     }
 
     initialize = async (expressApp: Express): Promise<void> => {
-        // user get
-        let onUserGetSuccess = new ExtractPasswordSaltValueFromUserSequenceNode(
-            "user",
-            "userPasswordSaltValue"
-        )
-        onUserGetSuccess.append(
-            new BooleanEquationSequenceNode(
-                new ReturnSuccessWithDataNode([]),
-                new ReturnErrCodeSequenceNode("ERRCODE_AUTH_FAILED", []),
-                (data: SequenceNodeExecuteData) => {
-                    let password = data.data["password"];
-                    let userSaltValue = data.data["userPasswordSaltValue"] as SaltValuePair;
-                    let inputPasswordSaltValue = SaltValuePair.CreateFromSalt(userSaltValue.Salt, password);
-                    return userSaltValue.IsEqualsTo(inputPasswordSaltValue);
-                }
+        let firstNode = new StartSequenceNode();
+        firstNode
+            .append(
+                new PopulateRequestInputFieldsInRecordsSequenceNode(["login", "password"])
             )
-        );
+            .append(
+                this.getLoginMethod()
+            )
 
+        expressApp.post(this.path, (req: Request, res: Response) => {
+            firstNode.execute(SequenceNodeExecuteData.empty(req, res))
+        });
+    }
+
+    getLoginMethod = (): SequenceNode => {
+        // second in queue
         // by email
         let loginByEmail = new GetUserByEmailSequenceNode(
             new ReturnErrCodeSequenceNode("ERRCODE_AUTH_FAILED", []),
@@ -49,8 +48,9 @@ class PostUserLoginRoute implements IRoute {
             "login",
             "user"
         );
-        loginByEmail.append(onUserGetSuccess);
+        loginByEmail.append(this.getLoginOnUserGetSuccess());
 
+        // first in queue
         // by username
         let loginByUsername = new GetUserByUsernameSequenceNode(
             loginByEmail,
@@ -58,24 +58,59 @@ class PostUserLoginRoute implements IRoute {
             "login",
             "user"
         );
-        loginByUsername.append(onUserGetSuccess);
+        loginByUsername.append(this.getLoginOnUserGetSuccess());
+
+        return loginByUsername;
+    }
+
+    getLoginOnUserGetSuccess = (): SequenceNode => {
 
 
 
-        let firstNode = new StartSequenceNode();
-        firstNode
-            .append(
-                new PopulateRequestInputFieldsInRecordsSequenceNode(["login", "password"])
+        let onUserGetSuccess = new ExtractPasswordSaltValueFromUserSequenceNode(
+            "user",
+            "userPasswordSaltValue"
+        )
+        onUserGetSuccess.append(
+            new HashFromSaltValueSequenceNode(
+                "password",
+                "userPasswordSaltValue",
+                "passwordWithSalt"
             )
-            .append(
-                loginByUsername
+        )
+        .append(
+            new BooleanEquationSequenceNode(
+                this.getCreateSession(),
+                new ReturnErrCodeSequenceNode("ERRCODE_AUTH_FAILED", []),
+                (data: SequenceNodeExecuteData) => {
+                    let userSaltValue = data.data["userPasswordSaltValue"] as SaltValuePair;
+                    let passwordSaltValue = data.data["passwordWithSalt"] as SaltValuePair;
+                    return userSaltValue.IsEqualsTo(passwordSaltValue);
+                }
             )
+        );
 
-        expressApp.post(this.path, (req: Request, res: Response) => {
-            firstNode.execute(SequenceNodeExecuteData.empty(req, res))
-        });
+        return onUserGetSuccess;
+    }
+
+    getCreateSession = (): SequenceNode => {
+        let createSession = new CreateSessionSequenceNode(
+            new ReturnErrCodeSequenceNode("ERRCODE_CREATE_SESSION_FAILED", []),
+            this.databaseQuery,
+            "user",
+            "session"
+        );
+
+        createSession.append(
+            new ReturnSuccessWithDataNode(["session"])
+        );
+
+        return createSession;
     }
 }
+
+
+
 
 
 export default PostUserLoginRoute;
