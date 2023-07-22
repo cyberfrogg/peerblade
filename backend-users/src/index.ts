@@ -2,7 +2,7 @@ import PostUserVerifyEmailRoute from "./routes/api/v1/user/PostUserVerifyEmailRo
 
 require('dotenv').config({ path: '.env' });
 import express from "express";
-import GetPingRoute from "./routes/api/v1/GetPingRoute";
+import GetUserPingRoute from "./routes/api/v1/user/GetUserPingRoute";
 import IRoute from "./services/routes/IRoute";
 import LoggerService from './services/logger/impl/LoggerService';
 import ILoggerService from "./services/logger/ILoggerService";
@@ -36,7 +36,7 @@ const initializeApp = async () => {
 // create routes
 const createRoutes = async (logger: ILoggerService, databaseQuery: DatabaseQuery): Promise<Array<IRoute>> => {
     let routes = new Array<IRoute>();
-    routes.push(new GetPingRoute("/api/v1/ping"));
+    routes.push(new GetUserPingRoute("/api/v1/user/ping"));
     routes.push(new PostUserCreateRoute("/api/v1/user/create", databaseQuery));
     routes.push(new PostUserVerifyEmailRoute("/api/v1/user/verifyemail", databaseQuery));
     routes.push(new PostUserLoginRoute("/api/v1/user/login", databaseQuery));

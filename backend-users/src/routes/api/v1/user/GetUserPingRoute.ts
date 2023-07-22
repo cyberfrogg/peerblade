@@ -1,10 +1,10 @@
 import { Express, Request, Response } from "express";
-import IRoute from "../../../services/routes/IRoute";
-import StartSequenceNode from "../../../services/sequencer/impl/actions/utils/StartSequenceNode";
-import SequenceNodeExecuteData from "../../../services/sequencer/SequenceNodeExecuteData";
-import ReturnSuccessWithDataNode from "../../../services/sequencer/impl/actions/utils/ReturnSuccessWithDataNode";
+import IRoute from "../../../../services/routes/IRoute";
+import StartSequenceNode from "../../../../services/sequencer/impl/actions/utils/StartSequenceNode";
+import SequenceNodeExecuteData from "../../../../services/sequencer/SequenceNodeExecuteData";
+import ReturnSuccessWithDataNode from "../../../../services/sequencer/impl/actions/utils/ReturnSuccessWithDataNode";
 
-class GetPingRoute implements IRoute {
+class GetUserPingRoute implements IRoute {
     readonly path: string;
 
     constructor(path: string) {
@@ -23,4 +23,4 @@ class GetPingRoute implements IRoute {
     }
 }
 
-export default GetPingRoute;
+export default GetUserPingRoute;
