@@ -17,8 +17,10 @@ conf_email_smtp_pass=superadmin
 conf_email_smtp_from=noreply@mail.domain.com
 
 conf_backend_users_port=5001
+conf_frontend_port=5050
 
 conf_website_name=peerblade
-conf_website_cors_url=http://localhost:3001
-conf_website_url=http://localhost:3001
+conf_website_cors_url=http://localhost:8080
+conf_website_url=http://localhost:8080
+conf_website_api_url=http://localhost:8080
 

@@ -46,9 +46,11 @@ echo "Target run script: ${node_container_target_script}"
 echo "STOPPING AND DELETING CONTAINERS"
 podman stop peerblade_mysql
 podman stop peerblade_backend_users
+podman stop peerblade_frontend
 podman stop peerblade_nginx
 podman rm peerblade_mysql
 podman rm peerblade_backend_users
+podman rm peerblade_frontend
 podman rm peerblade_nginx
 echo "DELETING POD"
 podman pod rm $conf_pod_name
@@ -74,6 +76,7 @@ podman pod create \
 	-p 5002:5002 \
 	-p 5003:5003 \
 	-p 5004:5004 \
+	-p 5050:5050 \
 	-p 3306:3306 \
 	--network $conf_pod_network_name
 echo "POD STARTED"
@@ -113,6 +116,19 @@ podman run -d \
         node:18.15.0 \
         -c '/home/node/app/'${node_container_target_script}
 
+# Frontend
+podman run -d \
+	--name peerblade_frontend \
+	-v ${repoPath}'/frontend:/home/node/app:Z' \
+	-e NODE_ENV=$node_env \
+	-e PORT=$conf_frontend_port \
+	-e WEBSITE_NAME=$conf_website_name \
+	-e WEBSITE_URL=$conf_website_url \
+	-e WEBSITE_API_URL=$conf_website_api_url \
+	--entrypoint="/bin/bash" \
+	--pod=$conf_pod_name \
+	node:18.15.0 \
+	-c 'home/node/app/'${node_container_target_script}
 
 # Nginx
 podman run --name peerblade_nginx \
