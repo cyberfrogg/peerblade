@@ -122,9 +122,9 @@ podman run -d \
 	-v ${repoPath}'/frontend:/home/node/app:Z' \
 	-e NODE_ENV=$node_env \
 	-e PORT=$conf_frontend_port \
-	-e WEBSITE_NAME=$conf_website_name \
-	-e WEBSITE_URL=$conf_website_url \
-	-e WEBSITE_API_URL=$conf_website_api_url \
+	-e NEXT_PUBLIC_WEBSITE_NAME=$conf_website_name \
+	-e NEXT_PUBLIC_WEBSITE_URL=$conf_website_url \
+	-e NEXT_PUBLIC_WEBSITE_API_URL=$conf_website_api_url \
 	--entrypoint="/bin/bash" \
 	--pod=$conf_pod_name \
 	node:18.15.0 \

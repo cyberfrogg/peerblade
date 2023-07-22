@@ -1,0 +1,1 @@
+export const WEBSITE_NAME: string = process.env.NEXT_PUBLIC_WEBSITE_NAME;
