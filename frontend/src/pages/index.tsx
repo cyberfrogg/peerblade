@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import {WEBSITE_NAME} from "@/utils/constants";
+import HomeLayout from "@/layouts/home/homeLayout";
 
 export default function Home() {
     return (
@@ -10,9 +10,9 @@ export default function Home() {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <main>
-                {WEBSITE_NAME}
-            </main>
+            <HomeLayout title={"Feed"}>
+                Test
+            </HomeLayout>
         </>
     )
 }
