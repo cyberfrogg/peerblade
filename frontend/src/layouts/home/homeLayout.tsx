@@ -1,9 +1,10 @@
 import Head from 'next/head';
-import React, {Component, ReactNode} from 'react';
+import React, {Component} from 'react';
 import classes from './homeLayout.module.css'
-import BodyPageWidther from "@/components/widthers/bodyPageWidther";
+import BodyPageWidther from "@/components/helpers/widthers/bodyPageWidther";
 import Header from "@/components/navigation/header/header";
 import BodyPageGrid from "@/components/grids/bodyPageGrid";
+import NavigationSideBar from "@/components/navigation/navigationSideBar/navigationSideBar";
 
 interface HomePageLayoutProps {
     title: string,
@@ -25,7 +26,10 @@ export default class HomeLayout extends Component<HomePageLayoutProps, HomePageL
                     <Header/>
                     <BodyPageWidther>
                         <BodyPageGrid>
-                            {this.props.children}
+                            <NavigationSideBar/>
+                            <div className={classes.childContainer}>
+                                {this.props.children}
+                            </div>
                         </BodyPageGrid>
                     </BodyPageWidther>
                 </div>

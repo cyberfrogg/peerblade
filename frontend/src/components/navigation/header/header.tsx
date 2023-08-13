@@ -1,6 +1,6 @@
-import {Component, ReactNode} from "react";
+import {Component} from "react";
 import classes from './header.module.css'
-import BodyPageWidther from "@/components/widthers/bodyPageWidther";
+import BodyPageWidther from "@/components/helpers/widthers/bodyPageWidther";
 import BodyPageGrid from "@/components/grids/bodyPageGrid";
 
 

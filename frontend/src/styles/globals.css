@@ -1,19 +1,26 @@
 :root {
-  --color-primary: #191b22;
-  --color-secondary: #282c37;
-  --color-accent: #6364ff;
-  --color-text-primary: #9baec8;
-  --color-text-content: #f7faff;
+    --color-primary: #191b22;
+    --color-secondary: #282c37;
+    --color-accent: #6364ff;
+    --color-text-primary: #9baec8;
+    --color-text-content: #f7faff;
+    --color-text-title: #f7faff;
+
+    --panel-border-radius: 6px;
+    --panel-inner-border-radius: 4px;
+
+    --text-font-primary: 15px;
+    --text-font-secondary: 13px;
 }
 
 *{
-  padding: 0;
-  margin: 0;
-  font-size: 15px;
-  font-family: "Noto Sans", Roboto, sans-serif;
-  color: var(--color-text-primary);
+    padding: 0;
+    margin: 0;
+    font-size: var(--text-font-primary);
+    font-family: "Noto Sans", Roboto, sans-serif;
+    color: var(--color-text-primary);
 }
 
 body{
-  background: var(--color-primary);
+    background: var(--color-primary);
 }

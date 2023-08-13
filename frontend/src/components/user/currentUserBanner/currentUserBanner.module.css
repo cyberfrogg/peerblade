@@ -1,0 +1,40 @@
+.currentUserBanner{
+    width: calc(100% - 0px - 20px);
+    padding: 10px;
+    background: var(--color-secondary);
+    margin: 0 auto;
+    border-radius: var(--panel-border-radius);
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    grid-gap: 10px;
+}
+
+.avatar{
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+    border-radius: var(--panel-inner-border-radius);
+}
+.avatar img{
+    width: 100%;
+    height: 100%;
+}
+
+.textInfo{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.name{
+    text-decoration: none;
+    font-size: var(--text-font-secondary);
+    color: var(--color-text-title);
+    width: fit-content;
+}
+.editProfile{
+    text-decoration: none;
+    font-size: var(--text-font-secondary);
+    width: fit-content;
+}
