@@ -3,7 +3,7 @@ import currentSessionReducer from '@/slices/auth/currentSessionSlice'
 
 export const store = configureStore({
     reducer: {
-        auth: currentSessionReducer
+        currentSession: currentSessionReducer
     },
 })
 
