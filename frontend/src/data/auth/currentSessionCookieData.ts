@@ -1,7 +1,7 @@
 export default class CurrentSessionCookieData {
-    Id: string;
-    UserId: number;
-    Token: string;
+    Id: string = "";
+    UserId: string = "";
+    Token: string = "";
     CreateTime: Date;
 
     constructor(id: string, userId: number, token: string, createTime: Date) {
