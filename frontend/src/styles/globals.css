@@ -5,6 +5,9 @@
     --color-text-primary: #9baec8;
     --color-text-content: #f7faff;
     --color-text-title: #f7faff;
+    --color-button-bg-color: #6364ff;
+    --color-button-bg-color-hover: #7474e6;
+    --color-button-text-color: #f7faff;
 
     --panel-border-radius: 6px;
     --panel-inner-border-radius: 4px;
@@ -13,7 +16,7 @@
     --text-font-secondary: 13px;
 }
 
-*{
+* {
     padding: 0;
     margin: 0;
     font-size: var(--text-font-primary);
@@ -21,6 +24,6 @@
     color: var(--color-text-primary);
 }
 
-body{
+body {
     background: var(--color-primary);
 }
