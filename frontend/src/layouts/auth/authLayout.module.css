@@ -1,0 +1,16 @@
+.authLayout{
+    width: 100%;
+}
+
+.mainContainer{
+    width: 100%;
+}
+
+.childContainer{
+    width: 100%;
+    height: calc(100vh - var(--header-height));
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}

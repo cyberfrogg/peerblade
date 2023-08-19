@@ -5,8 +5,8 @@ export const WEBSITE_API_URL: string = process.env.NEXT_PUBLIC_WEBSITE_API_URL a
 // pages
 export const WEBSITE_PAGE_EDIT_PROFILE_URL = WEBSITE_URL + "/edit-profile";
 export const WEBSITE_PAGE_TAGS_URL = WEBSITE_URL + "/tags";
-export const WEBSITE_PAGE_SIGN_IN = WEBSITE_URL + "/sign-in";
-export const WEBSITE_PAGE_JOIN = WEBSITE_URL + "/join";
+export const WEBSITE_PAGE_SIGN_IN = WEBSITE_URL + "/auth/sign-in";
+export const WEBSITE_PAGE_JOIN = WEBSITE_URL + "/auth/join";
 
 // pages parts
 export const WEBSITE_PAGE_USER_URL = WEBSITE_URL + "/user";

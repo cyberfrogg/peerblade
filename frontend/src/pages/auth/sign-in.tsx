@@ -1,17 +1,17 @@
-import HomeLayout from "@/layouts/home/homeLayout";
 import {useEffect} from "react";
 import CurrentSessionFetcher from "@/clientStateFetchers/impls/currentSessionFetcher";
+import AuthLayout from "@/layouts/auth/authLayout";
 
-export default function Home() {
+export default function SignIn() {
     useEffect(() => {
         new CurrentSessionFetcher().fetch();
     });
 
     return (
         <>
-            <HomeLayout title={"Feed"}>
-                Testas
-            </HomeLayout>
+            <AuthLayout title={"Sign in"}>
+                Sign in
+            </AuthLayout>
         </>
     )
 }

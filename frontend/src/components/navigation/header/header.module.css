@@ -1,6 +1,6 @@
 .header{
     width: 100%;
-    height: 60px;
+    height: var(--header-height);
     position: fixed;
     left: 0;
     top: 0;
@@ -17,5 +17,5 @@
 
 .offset{
     width: 100%;
-    height: 60px;
+    height: var(--header-height);
 }

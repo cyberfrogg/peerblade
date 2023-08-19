@@ -1,7 +1,7 @@
 import classes from './currentUserBanner.module.css'
 import Link from "next/link";
 import { WEBSITE_PAGE_EDIT_PROFILE_URL, WEBSITE_PAGE_JOIN, WEBSITE_PAGE_SIGN_IN } from "@/utils/constants";
-import { RootState, store } from "@/store";
+import { RootState } from "@/store";
 import { useSelector } from "react-redux";
 
 
@@ -46,8 +46,8 @@ const RenderLoading = () => {
 const RenderAnonymous = () => {
     return (
         <div className={classes.anonymousWelcome}>
-            <Link href={WEBSITE_PAGE_JOIN} className={classes.button} >Join</Link>
             <Link href={WEBSITE_PAGE_SIGN_IN} className={classes.button} >Sign in</Link>
+            <Link href={WEBSITE_PAGE_JOIN} className={classes.button} >Join</Link>
         </div>
     )
 }
