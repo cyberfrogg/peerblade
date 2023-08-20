@@ -74,5 +74,5 @@ const onPasswordInputFieldChange = (value: string) => {
 
 }
 const onSubmitPress = () => {
-    console.log("Clicked on submit press")
+    console.log("Clicked on submit press + 1")
 }
