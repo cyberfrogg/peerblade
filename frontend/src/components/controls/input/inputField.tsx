@@ -1,4 +1,4 @@
-import { ChangeEvent, Component } from "react";
+import {ChangeEvent, ReactElement} from "react";
 import classes from "./inputField.module.css";
 
 interface InputFieldProps {
@@ -9,64 +9,18 @@ interface InputFieldProps {
     value: string;
     isFinalElement?: boolean;
 }
-interface InputFieldState {
 
-}
-
-export default class InputField extends Component<InputFieldProps, InputFieldState> {
-    onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-        this.props.onChange(event.target.value);
+export default function InputField(props: InputFieldProps) {
+    const onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+        props.onChange(event.target.value);
     }
 
-    render = () => {
-        switch (this.props.type) {
-            case "text": {
-                return this.renderTextInputField();
-            }
-            case "password": {
-                return this.renderPasswordInputField();
-            }
-        }
+    const isFinalElement = (): boolean => {
+        return props.isFinalElement == true;
     }
 
-    renderTextInputField = () => {
-        const rootClass = this.isFinalElement() ? (classes.textInputField + " " +  classes.resetMarginBottom) : classes.textInputField;
-
-        return (
-            <>
-                {this.renderLabel()}
-                <div className={rootClass}>
-                    <input
-                        className={classes.input}
-                        onChange={this.onInputChange}
-                        value={this.props.value}
-                        placeholder={this.props.placeholder}
-                    />
-                </div>
-            </>
-        )
-    }
-
-    renderPasswordInputField = () => {
-        const rootClass = this.isFinalElement() ? (classes.textInputField + " " +  classes.resetMarginBottom) : classes.textInputField;
-
-        return (
-            <>
-                {this.renderLabel()}
-                <div className={rootClass}>
-                    <input
-                        className={classes.input}
-                        onChange={this.onInputChange}
-                        value={this.props.value}
-                        placeholder={this.props.placeholder}
-                    />
-                </div>
-            </>
-        )
-    }
-
-    renderLabel = () => {
-        if (this.props.label == undefined) {
+    const renderLabel = () => {
+        if (props.label == undefined) {
             return (
                 <>
                 </>
@@ -74,13 +28,60 @@ export default class InputField extends Component<InputFieldProps, InputFieldSta
         } else {
             return (
                 <label className={classes.inputFieldLabel}>
-                    {this.props.label}
+                    {props.label}
                 </label>
             )
         }
     }
 
-    isFinalElement = (): boolean => {
-        return this.props.isFinalElement == true;
+    const renderTextInputField = () => {
+        const rootClass = isFinalElement() ? (classes.textInputField + " " + classes.resetMarginBottom) : classes.textInputField;
+
+        return (
+            <>
+                {renderLabel()}
+                <div className={rootClass}>
+                    <input
+                        className={classes.input}
+                        onChange={onInputChange}
+                        value={props.value}
+                        placeholder={props.placeholder}
+                    />
+                </div>
+            </>
+        )
     }
+
+    const renderPasswordInputField = () => {
+        const rootClass = isFinalElement() ? (classes.textInputField + " " + classes.resetMarginBottom) : classes.textInputField;
+
+        return (
+            <>
+                {renderLabel()}
+                <div className={rootClass}>
+                    <input
+                        className={classes.input}
+                        onChange={onInputChange}
+                        value={props.value}
+                        placeholder={props.placeholder}
+                    />
+                </div>
+            </>
+        )
+    }
+
+    let rendered: ReactElement = <>INPUT FIELD TYPE MISS MATCH</>
+
+    switch (props.type) {
+        case "text": {
+            rendered = renderTextInputField();
+            break;
+        }
+        case "password": {
+            rendered = renderPasswordInputField();
+            break;
+        }
+    }
+
+    return rendered;
 }
