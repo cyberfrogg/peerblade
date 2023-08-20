@@ -1,0 +1,21 @@
+.header{
+    width: 100%;
+    height: var(--header-height);
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 1000;
+    background: var(--color-secondary);
+}
+.header > *{
+    height: 100%;
+}
+.header > * > *{
+    height: 100%;
+}
+
+
+.offset{
+    width: 100%;
+    height: var(--header-height);
+}

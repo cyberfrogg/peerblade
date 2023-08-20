@@ -1,0 +1,7 @@
+.authPanel{
+    width: calc(100% - 40px);
+    padding: 20px;
+    max-width: 400px;
+    background: var(--color-secondary);
+    border-radius: var(--input-border-radius);
+}

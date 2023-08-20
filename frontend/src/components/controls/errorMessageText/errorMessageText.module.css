@@ -1,0 +1,12 @@
+.errorMessageText {
+    color: var(--color-text-error);
+    margin-bottom: 16px;
+}
+
+.errorMessageText.hidden {
+    display: none;
+}
+
+.resetMarginBottom {
+    margin-bottom: 0 !important;
+}

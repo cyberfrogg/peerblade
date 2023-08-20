@@ -34,7 +34,7 @@ class CreateSessionSequenceNode extends SequenceNodeAction {
 
             const createSessionQueryResult = await this.databaseQuery.build()
                 .insertInto(DatabaseTableKeys.Sessions, ["uuid, useruuid", "token"])
-                .values([newSessionUuid, user.username, newSessionToken])
+                .values([newSessionUuid, user.uuid, newSessionToken])
                 .execute();
 
             if (createSessionQueryResult.affectedRows != 1) {

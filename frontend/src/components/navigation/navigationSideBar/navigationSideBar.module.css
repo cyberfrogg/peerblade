@@ -1,0 +1,23 @@
+.navigationSideBar{
+    width: 100%;
+}
+
+.pagesList{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.pagesList .link{
+    width: calc(100% - 20px);
+    margin-bottom: 5px;
+    padding: 0 10px;
+    height: 30px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    text-decoration: none;
+    border-radius: var(--panel-border-radius);
+}
+.pagesList .link:hover{
+    background: var(--color-secondary);
+}

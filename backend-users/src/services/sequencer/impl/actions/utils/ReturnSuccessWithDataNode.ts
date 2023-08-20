@@ -16,7 +16,6 @@ class ReturnSuccessWithDataNode extends SequenceNodeAction {
         for (const key in data.data) {
             if (this.keysToOutput.includes(key)) {
                 dataToOutput[key] = data.data[key];
-                console.log(key);
             }
         }
 

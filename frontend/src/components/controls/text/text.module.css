@@ -1,0 +1,17 @@
+.text {
+    color: var(--text-font-primary);
+    margin-bottom: 16px;
+}
+
+.centered {
+    text-align: center;
+}
+
+.resetMarginBottom {
+    margin-bottom: 0 !important;
+}
+
+.text>a {
+    color: var(--color-text-link);
+    text-decoration: underline;
+}
