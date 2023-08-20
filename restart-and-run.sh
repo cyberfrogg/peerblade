@@ -18,6 +18,8 @@ echo "Nginx config:"
 echo "${nginxConfdPath}"
 echo ""
 
+# TODO: Handle if ./config.sh doesn't exists
+
 # Load config
 source ./config.sh
 echo "Website name:"
