@@ -7,17 +7,20 @@
     --color-text-primary: #9baec8;
     --color-text-content: #f7faff;
     --color-text-title: #f7faff;
+    --color-text-link: #5f94ff;
+    --color-text-error: #f33535;
 
     /* Button */
-    --color-button-bg-color: #6364ff;
-    --color-button-bg-color-hover: #7474e6;
-    --color-button-text-color: #f7faff;
+    --button-bg-color: #6364ff;
+    --button-bg-color-hover: #7474e6;
+    --button-text-color: #f7faff;
 
     /* Input */
     --input-bg-color: #131419;
     --input-text-color: #f7faff;
-    --input-border-color: #1b2331;
+    --input-border-color: #48505c;
     --input-border-radius: 4px;
+    --input-text-placeholder-color: #48505c;
 
     /* Border */
     --panel-border-radius: 6px;

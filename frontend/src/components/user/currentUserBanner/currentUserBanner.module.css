@@ -58,9 +58,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: min-content;
     background: #6364ff;
-    color: var(--color-button-text-color);
+    color: var(--button-text-color);
     text-decoration: none;
     border-radius: var(--panel-inner-border-radius);
     width: 100%;
@@ -69,5 +68,5 @@
 }
 
 .anonymousWelcome .button:hover {
-    background: var(--color-button-bg-color-hover);
+    background: var(--button-bg-color-hover);
 }

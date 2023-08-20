@@ -8,9 +8,10 @@
 
 .childContainer{
     width: 100%;
-    height: calc(100vh - var(--header-height));
+    padding: 20px 0;
+    height: calc(100vh - var(--header-height) - 40px);
     display: flex;
-    justify-content: center;
     flex-direction: column;
+    justify-content: flex-start;
     align-items: center;
 }

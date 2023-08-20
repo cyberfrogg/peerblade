@@ -1,15 +1,23 @@
-import { Component } from "react";
+import { ChangeEvent, Component } from "react";
 import classes from "./inputField.module.css";
 
 interface InputFieldProps {
     type: string;
     label?: string;
+    placeholder?: string;
+    onChange: (value: string) => void;
+    value: string;
+    isFinalElement?: boolean;
 }
 interface InputFieldState {
 
 }
 
 export default class InputField extends Component<InputFieldProps, InputFieldState> {
+    onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+        this.props.onChange(event.target.value);
+    }
+
     render = () => {
         switch (this.props.type) {
             case "text": {
@@ -22,43 +30,57 @@ export default class InputField extends Component<InputFieldProps, InputFieldSta
     }
 
     renderTextInputField = () => {
+        const rootClass = this.isFinalElement() ? (classes.textInputField + " " +  classes.resetMarginBottom) : classes.textInputField;
+
         return (
             <>
                 {this.renderLabel()}
-                <div className={classes.textInputField}>
-                    <div className={classes.inputContainer}>
-                        <input className={classes.input}/>
-                    </div>
+                <div className={rootClass}>
+                    <input
+                        className={classes.input}
+                        onChange={this.onInputChange}
+                        value={this.props.value}
+                        placeholder={this.props.placeholder}
+                    />
                 </div>
             </>
         )
     }
 
     renderPasswordInputField = () => {
+        const rootClass = this.isFinalElement() ? (classes.textInputField + " " +  classes.resetMarginBottom) : classes.textInputField;
+
         return (
             <>
                 {this.renderLabel()}
-                <div className={classes.passwordInputField}>
-                    <div className={classes.inputContainer}>
-                        <input className={classes.input}/>
-                    </div>
+                <div className={rootClass}>
+                    <input
+                        className={classes.input}
+                        onChange={this.onInputChange}
+                        value={this.props.value}
+                        placeholder={this.props.placeholder}
+                    />
                 </div>
             </>
         )
     }
 
     renderLabel = () => {
-        if(this.props.label == undefined){
-            return(
+        if (this.props.label == undefined) {
+            return (
                 <>
                 </>
             )
-        }else{
-            return(
+        } else {
+            return (
                 <label className={classes.inputFieldLabel}>
                     {this.props.label}
                 </label>
             )
         }
+    }
+
+    isFinalElement = (): boolean => {
+        return this.props.isFinalElement == true;
     }
 }
