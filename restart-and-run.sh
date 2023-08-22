@@ -109,6 +109,7 @@ podman run -d \
 	-e EMAIL_SMTP_FROM=$conf_email_smtp_from \
 	-e DB_HOST=$conf_mysql_host \
 	-e DB_PORT=$conf_mysql_port \
+	-e DB_USER=$conf_mysql_user \
 	-e DB_NAME=$conf_mysql_name \
 	-e DB_PASS=$conf_mysql_pass \
 	-e DB_IS_DEBUG=$conf_mysql_is_debug \

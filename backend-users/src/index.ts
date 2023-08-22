@@ -55,13 +55,29 @@ const createRoutes = async (logger: ILoggerService, databaseQuery: DatabaseQuery
 const createDatabaseQuery = async (): Promise<DatabaseQuery> => {
     const config = new DatabaseConfig(
         process.env.DB_HOST as string,
-        Number.parseInt(process.env.DB_POPT as string),
+        Number.parseInt(process.env.DB_PORT as string),
         process.env.DB_NAME as string,
         process.env.DB_USER as string,
         process.env.DB_PASS as string,
         process.env.DB_IS_DEBUG == "true",
         process.env.DB_IS_TRACE == "true"
     );
+
+    if(config.host == undefined){
+        throw new Error("DB_HOST is undefined");
+    }
+    if(config.port == undefined){
+        throw new Error("DB_PORT is undefined");
+    }
+    if(config.database == undefined){
+        throw new Error("DB_NAME is undefined");
+    }
+    if(config.user == undefined){
+        throw new Error("DB_USER is undefined");
+    }
+    if(config.password == undefined){
+        throw new Error("DB_PASS is undefined");
+    }
 
     return new DatabaseQuery(config);
 }
